@@ -1,15 +1,50 @@
+// Document Service
+
 const Document = require("../models/ModelDocument");
 
-const uploadDocument = async (documentData) => {
+const documentsSave = async (documentsData) => {
   try {
-    const document = new Document(documentData);
-    const savedDocument = await document.save();
-    return savedDocument;
+    console.log("DATA:::", documentsData);
+    const savedDocuments = await Document.insertMany(documentsData);
+    return savedDocuments;
   } catch (error) {
-    throw new Error("Document upload failed: " + error.message);
+    throw new Error("Documents upload failed: " + error.message);
+  }
+};
+
+const documentFindByID = async (documentId) => {
+  try {
+    const document = await Document.findById(documentId);
+    return document;
+  } catch (error) {
+    throw new Error("Failed to retrieve document: " + error.message);
+  }
+};
+
+const documentFindByUserID = async (userId) => {
+  try {
+    const documents = await Document.find({ uploader: userId });
+    return documents;
+  } catch (error) {
+    throw new Error("Failed to retrieve document: " + error.message);
+  }
+};
+
+const documentsGetAllWithUsers = async () => {
+  try {
+    const documents = await Document.find({}).populate(
+      "uploader",
+      "username email"
+    ); // uploader alanını User modeli ile populate ediyoruz
+    return documents;
+  } catch (error) {
+    throw new Error("Failed to fetch documents with users: " + error.message);
   }
 };
 
 module.exports = {
-  uploadDocument,
+  documentsSave,
+  documentFindByID,
+  documentFindByUserID,
+  documentsGetAllWithUsers,
 };
