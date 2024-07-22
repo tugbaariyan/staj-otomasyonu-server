@@ -42,9 +42,57 @@ const documentsGetAllWithUsers = async () => {
   }
 };
 
+const documentsGetAll = async () => {
+  try {
+    const documents = await Document.find({});
+    return documents;
+  } catch (error) {
+    throw new Error("Failed to fetch all documents: " + error.message);
+  }
+};
+
+const documentUpdateByID = async (documentId, updateData) => {
+  try {
+    const updatedDocument = await Document.findByIdAndUpdate(
+      documentId,
+      updateData,
+      { new: true }
+    );
+    return updatedDocument;
+  } catch (error) {
+    throw new Error("Failed to update document: " + error.message);
+  }
+};
+
+const documentUpdateStatusByID = async (
+  documentId,
+  newStatus,
+  rejectionMessage
+) => {
+  try {
+    // Status değerini güncelle
+    const updatedDocument = await Document.findByIdAndUpdate(
+      documentId,
+      { $set: { status: newStatus, rejectionMessage: rejectionMessage } }, // $set operatörü sadece status alanını günceller
+      { new: true } // Güncellenmiş belgeyi döndür
+    );
+
+    if (!updatedDocument) {
+      throw new Error("Document not found");
+    }
+
+    return updatedDocument;
+  } catch (error) {
+    throw new Error("Failed to update document status: " + error.message);
+  }
+};
+
 module.exports = {
   documentsSave,
   documentFindByID,
   documentFindByUserID,
   documentsGetAllWithUsers,
+  documentsGetAll,
+  documentUpdateByID,
+  documentUpdateStatusByID,
 };

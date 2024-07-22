@@ -9,7 +9,15 @@ const DocumentSchema = new Schema(
     //   enum: ["document1", "document2", "document3"],
     //   required: true,
     // }, // Belge türü enum olarak belirlendi
-    status: { type: String, enum: ["approved", "pending"], default: "pending" }, // Onay durumu enum olarak belirlendi
+    status: {
+      type: String,
+      enum: ["approved", "pending", "denied"],
+      default: "pending",
+    }, // Onay durumu enum olarak belirlendi
+    rejectionMessage: {
+      type: String,
+      default: "",
+    },
     fileData: [
       {
         originalName: { type: String, required: true },
