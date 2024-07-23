@@ -9,5 +9,9 @@ router.get("/getAllWithUser", controllerDocument.getAllDocumentsWithUsers);
 router.get("/getAll", controllerDocument.getAllDocuments);
 router.post("/update", controllerDocument.updateDocument);
 router.post("/updateStatus", controllerDocument.updateDocumentStatusByID);
+router.get(
+  "/getDocumentsWithStatus/:status",
+  controllerDocument.getDocumentsWithStatus
+);
 
 module.exports = router;

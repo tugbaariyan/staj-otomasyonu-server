@@ -87,6 +87,19 @@ const documentUpdateStatusByID = async (
   }
 };
 
+const documentsGetAllWithStatus = async (status) => {
+  try {
+    const approvedDocuments = await Document.find({
+      status: status,
+    })
+      .populate("uploader", "firstName lastName email")
+      .select("-fileData -rejectionMessage -status");
+    return approvedDocuments;
+  } catch (error) {
+    throw new Error("Failed to get approved documents: " + error.message);
+  }
+};
+
 module.exports = {
   documentsSave,
   documentFindByID,
@@ -95,4 +108,5 @@ module.exports = {
   documentsGetAll,
   documentUpdateByID,
   documentUpdateStatusByID,
+  documentsGetAllWithStatus,
 };
